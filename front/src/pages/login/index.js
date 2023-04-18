@@ -1,23 +1,44 @@
-import { useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+/*eslint no-unused-expressions: "error"*/
+import { useEffect } from "react";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+
+import { useNavigate } from "react-router";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined"; // Icon
 
 export default function Login() {
+  const navigate = useNavigate();
+
+  const onSuccess = (position) => {
+    console.log(position);
+  };
+  const onError = (error) => {
+    console.log(error);
+  };
+  const locationOptions = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  };
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      onSuccess,
+      onError,
+      locationOptions
+    );
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    navigate("/map");
   };
 
   return (
@@ -48,20 +69,7 @@ export default function Login() {
             autoComplete="email"
             autoFocus
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+
           <Button
             type="submit"
             fullWidth
