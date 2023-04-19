@@ -9,35 +9,46 @@ import {
   Typography,
   Container,
 } from "@mui/material";
+import { setMyLocation } from "../map/mapSlice";
 
 import { useNavigate } from "react-router";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"; // Icon
+import { useDispatch, useSelector } from "react-redux";
+import { getRandomPosition } from "../../data/positions";
+import { connectSocket } from "../../utils/connectSocket";
+import { loginAction } from "../../store/actions/loginActions";
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispach = useDispatch();
+  const myLocation = useSelector((state) => state.map.myLocation);
 
-  const onSuccess = (position) => {
+  const getPosition = (position) => {
     console.log(position);
-  };
-  const onError = (error) => {
-    console.log(error);
-  };
-  const locationOptions = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0,
+    dispach(setMyLocation(position.coords));
   };
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      onSuccess,
-      onError,
-      locationOptions
-    );
+    getPosition(getRandomPosition());
   }, []);
+
+  useEffect(() => {
+    if (myLocation) {
+      connectSocket();
+    }
+  }, [myLocation]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log(data.get("username"));
+    loginAction({
+      username: data.get("username"),
+      coords: {
+        lng: myLocation.lng,
+        lat: myLocation.lat,
+      },
+    });
     navigate("/map");
   };
 
@@ -63,10 +74,9 @@ export default function Login() {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="UserName"
+            name="username"
             autoFocus
           />
 

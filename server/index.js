@@ -19,8 +19,14 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+let onlineUsers = {};
+
 io.on("connection", (socket) => {
   console.log("User is connected");
+  socket.on("user-login", (data) => {
+    console.log("user-login");
+    loginEventHandler(data, socket);
+  });
   socket.on("disconnect", () => {
     disconnectedHandler(socket.id);
   });
@@ -31,4 +37,19 @@ server.listen(8000);
 // Socket Events
 const disconnectedHandler = (id) => {
   console.log(`Connections is failed ${id}`);
+  removeOnlineUserEventHandler(id);
+};
+
+const removeOnlineUserEventHandler = (id) => {
+  if (onlineUsers[id]) {
+    delete onlineUsers[id];
+  }
+};
+
+const loginEventHandler = (data, socket) => {
+  onlineUsers[socket.id] = {
+    username: data.username,
+    coords: data.coords,
+  };
+  console.log(onlineUsers);
 };
