@@ -51,5 +51,7 @@ const loginEventHandler = (data, socket) => {
     username: data.username,
     coords: data.coords,
   };
-  console.log(onlineUsers);
+  console.log("onlineUsers*********");
+
+  io.to("logged-user").emit("online-users", "Ali");
 };

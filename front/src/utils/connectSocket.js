@@ -7,8 +7,13 @@ export const connectSocket = () => {
   socket.on("connect", () => {
     console.log("Connected to socket");
   });
+
+  socket.on("online-users", (userData) => {
+    alert("asdadsd");
+    console.log(userData);
+  });
 };
 
 export const login = (data) => {
-  socket.emit("user-login", data);
+  socket.emit("logged-user", data);
 };
