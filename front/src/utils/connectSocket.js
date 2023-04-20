@@ -9,11 +9,10 @@ export const connectSocket = () => {
   });
 
   socket.on("online-users", (userData) => {
-    alert("asdadsd");
     console.log(userData);
   });
 };
 
 export const login = (data) => {
-  socket.emit("logged-user", data);
+  socket.emit("user-login", data);
 };

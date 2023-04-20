@@ -47,11 +47,26 @@ const removeOnlineUserEventHandler = (id) => {
 };
 
 const loginEventHandler = (data, socket) => {
+  socket.join("logged-user");
+
   onlineUsers[socket.id] = {
     username: data.username,
     coords: data.coords,
   };
-  console.log("onlineUsers*********");
 
-  io.to("logged-user").emit("online-users", "Ali");
+  io.to("logged-user").emit("online-users", getOnlineUsersData());
 };
+
+
+const getOnlineUsersData =()=>{
+  let onlineUsersData =[];
+  Object.entries(onlineUsers).forEach(([key, value])=>{
+    onlineUsersData.push({
+      socketId: key,
+      username: value.username,
+      coords : value.coords
+    });
+  });
+
+  return onlineUsersData;
+}
