@@ -13,19 +13,20 @@ import { setMyLocation } from "../map/mapSlice";
 
 import { useNavigate } from "react-router";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"; // Icon
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getRandomPosition } from "../../data/positions";
 import { connectSocket } from "../../utils/connectSocket";
-import { loginAction } from "../../store/actions/loginActions";
+import {
+  setMyLocationHandler,
+  loginAction,
+} from "../../store/actions/loginActions";
 
 export default function Login() {
   const navigate = useNavigate();
-  const dispach = useDispatch();
   const myLocation = useSelector((state) => state.map.myLocation);
 
   const getPosition = (position) => {
-    console.log(position);
-    dispach(setMyLocation(position.coords));
+    setMyLocationHandler(position);
   };
 
   useEffect(() => {

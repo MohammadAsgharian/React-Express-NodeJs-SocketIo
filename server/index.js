@@ -38,12 +38,17 @@ server.listen(8000);
 const disconnectedHandler = (id) => {
   console.log(`Connections is failed ${id}`);
   removeOnlineUserEventHandler(id);
+  broadcastDisconnectedUser(id);
 };
 
 const removeOnlineUserEventHandler = (id) => {
   if (onlineUsers[id]) {
     delete onlineUsers[id];
   }
+};
+
+const broadcastDisconnectedUser = (disconnectedUserSocketId) => {
+  io.to("logged-user").emit("user-disconnect", disconnectedUserSocketId);
 };
 
 const loginEventHandler = (data, socket) => {
@@ -57,16 +62,15 @@ const loginEventHandler = (data, socket) => {
   io.to("logged-user").emit("online-users", getOnlineUsersData());
 };
 
-
-const getOnlineUsersData =()=>{
-  let onlineUsersData =[];
-  Object.entries(onlineUsers).forEach(([key, value])=>{
+const getOnlineUsersData = () => {
+  let onlineUsersData = [];
+  Object.entries(onlineUsers).forEach(([key, value]) => {
     onlineUsersData.push({
       socketId: key,
       username: value.username,
-      coords : value.coords
+      coords: value.coords,
     });
   });
 
   return onlineUsersData;
-}
+};
