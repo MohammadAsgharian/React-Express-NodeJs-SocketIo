@@ -19,5 +19,3 @@ const iconOnlineUser = () =>
   });
 
 export { iconPerson, iconOnlineUser };
-
-export { iconPerson };

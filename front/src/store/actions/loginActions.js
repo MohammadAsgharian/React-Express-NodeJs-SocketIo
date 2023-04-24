@@ -7,5 +7,5 @@ export const loginAction = (data) => {
 };
 
 export const setMyLocationHandler = (position) => {
-  store.dispatch(setMyLocation(position.coords));
+  store.dispatch(setMyLocation(position));
 };

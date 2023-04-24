@@ -26,6 +26,7 @@ export default function Login() {
   const myLocation = useSelector((state) => state.map.myLocation);
 
   const getPosition = (position) => {
+    console.log(position);
     setMyLocationHandler(position);
   };
 
@@ -42,7 +43,6 @@ export default function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get("username"));
     loginAction({
       username: data.get("username"),
       coords: {
